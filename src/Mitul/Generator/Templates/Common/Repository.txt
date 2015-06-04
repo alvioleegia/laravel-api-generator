@@ -41,4 +41,16 @@ class $MODEL_NAME$Repository extends Repository
 
         return [$query->get(), $attributes];
     }
+
+    public function lastUpdated()
+    {
+        $query = $MODEL_NAME$::orderBy('updated_at','DESC')->first();
+
+        if($query)
+        {
+            return $query->updated_at->format('Y-m-d H:i:s');
+        }
+
+        return date("Y-m-d H:i:s");
+    }
 }

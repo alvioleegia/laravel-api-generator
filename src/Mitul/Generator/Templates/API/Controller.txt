@@ -23,7 +23,16 @@ class $MODEL_NAME$APIController extends AppBaseController
 
          $$MODEL_NAME_PLURAL_CAMEL$ = $result[0];
 
-		return Response::json(ResponseManager::makeResult($$MODEL_NAME_PLURAL_CAMEL$->toArray(), "$MODEL_NAME_PLURAL$ retrieved successfully."));
+         $meta = array(
+			'total' => count($$MODEL_NAME_PLURAL_CAMEL$),
+			'count' => count($$MODEL_NAME_PLURAL_CAMEL$),
+			'offset' => 0,
+			'last_updated' => $this->$MODEL_NAME_CAMEL$Repository->lastUpdated(),
+			'status' => "$MODEL_NAME_PLURAL$ retrieved successfully.",
+			'error' => 'Success'
+		 );
+
+		return Response::json(ResponseManager::makeResult($$MODEL_NAME_PLURAL_CAMEL$->toArray(), $meta));
 	}
 
 	/**
@@ -52,7 +61,16 @@ class $MODEL_NAME$APIController extends AppBaseController
 
 		$$MODEL_NAME_CAMEL$ = $MODEL_NAME$::create($input);
 
-		return Response::json(ResponseManager::makeResult($$MODEL_NAME_CAMEL$->toArray(), "$MODEL_NAME$ saved successfully."));
+		$meta = array(
+			'total' => 1,
+			'count' => 1,
+			'offset' => 0,
+			'last_updated' => $this->$MODEL_NAME_CAMEL$Repository->lastUpdated(),
+			'status' => "$MODEL_NAME$ saved successfully.",
+			'error' => 'Success'
+		 );
+
+		return Response::json(ResponseManager::makeResult($$MODEL_NAME_CAMEL$->toArray(), $meta), 201);
 	}
 
 	/**
@@ -71,7 +89,16 @@ class $MODEL_NAME$APIController extends AppBaseController
 		if(empty($$MODEL_NAME_CAMEL$))
 			$this->throwRecordNotFoundException("$MODEL_NAME$ not found", ERROR_CODE_RECORD_NOT_FOUND);
 
-		return Response::json(ResponseManager::makeResult($$MODEL_NAME_CAMEL$->toArray(), "$MODEL_NAME$ retrieved successfully."));
+		$meta = array(
+			'total' => $$MODEL_NAME_CAMEL$->count(),
+			'count' => $$MODEL_NAME_CAMEL$->count(),
+			'offset' => 0,
+			'last_updated' => $this->$MODEL_NAME_CAMEL$Repository->lastUpdated(),
+			'status' => "$MODEL_NAME$ retrieved successfully.",
+			'error' => 'Success'
+		 );
+
+		return Response::json(ResponseManager::makeResult($$MODEL_NAME_CAMEL$->toArray(), $meta));
 	}
 
 	/**
@@ -104,7 +131,16 @@ class $MODEL_NAME$APIController extends AppBaseController
 		$$MODEL_NAME_CAMEL$->fill($input);
 		$$MODEL_NAME_CAMEL$->save();
 
-		return Response::json(ResponseManager::makeResult($$MODEL_NAME_CAMEL$->toArray(), "$MODEL_NAME$ updated successfully."));
+		$meta = array(
+			'total' => $$MODEL_NAME_CAMEL$->count(),
+			'count' => $$MODEL_NAME_CAMEL$->count(),
+			'offset' => 0,
+			'last_updated' => $this->$MODEL_NAME_CAMEL$Repository->lastUpdated(),
+			'status' => "$MODEL_NAME$ updated successfully.",
+			'error' => 'Success'
+		 );
+
+		return Response::json(ResponseManager::makeResult($$MODEL_NAME_CAMEL$->toArray(), $meta), 201);
 	}
 
 	/**
@@ -121,9 +157,20 @@ class $MODEL_NAME$APIController extends AppBaseController
 		if(empty($$MODEL_NAME_CAMEL$))
 			$this->throwRecordNotFoundException("$MODEL_NAME$ not found", ERROR_CODE_RECORD_NOT_FOUND);
 
+		$meta = array(
+			'total' => $$MODEL_NAME_CAMEL$->count(),
+			'count' => $$MODEL_NAME_CAMEL$->count(),
+			'offset' => 0,
+			'last_updated' => $this->$MODEL_NAME_CAMEL$Repository->lastUpdated(),
+			'status' => "$MODEL_NAME$ deleted successfully.",
+			'error' => 'Success'
+		 );
+
 		$$MODEL_NAME_CAMEL$->delete();
 
-		return Response::json(ResponseManager::makeResult($id, "$MODEL_NAME$ deleted successfully."));
+
+
+		return Response::json(ResponseManager::makeResult($id, $meta));
 	}
 
 }

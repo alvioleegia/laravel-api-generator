@@ -30,11 +30,10 @@ class ResponseManager
 	 *
 	 * @return array
 	 */
-	public static function makeResult($data, $message)
+	public static function makeResult($data, $meta)
 	{
 		$result = array();
-		$result['flag'] = true;
-		$result['message'] = $message;
+		$result['meta'] = $meta;
 		$result['data'] = $data;
 
 		return $result;
@@ -49,11 +48,10 @@ class ResponseManager
 	 *
 	 * @return array
 	 */
-	public static function makeError($errorCode, $message, $data = array())
+	public static function makeError($errorCode, $meta, $data = array())
 	{
 		$error = array();
-		$error['flag'] = false;
-		$error['message'] = $message;
+		$error['meta'] = $meta;
 		$error['code'] = $errorCode;
 		if(!empty($data))
 			$error['data'] = $data;
