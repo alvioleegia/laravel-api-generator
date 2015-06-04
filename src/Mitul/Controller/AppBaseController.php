@@ -22,12 +22,12 @@ class AppBaseController extends Controller
 
 			$msg = substr($msg, 0, strlen($msg) - 1);
 
-			throw new HttpResponseException(Response::json(ResponseManager::makeError(ERROR_CODE_VALIDATION_FAILED, $msg)));
+			throw new HttpResponseException(Response::json(ResponseManager::makeError(ERROR_CODE_VALIDATION_FAILED, $msg), 400));
 		}
 	}
 
 	public function throwRecordNotFoundException($message, $code = 0)
 	{
-		throw new HttpResponseException(Response::json(ResponseManager::makeError($code, $message)));
+		throw new HttpResponseException(Response::json(ResponseManager::makeError($code, $message), 400));
 	}
 }
