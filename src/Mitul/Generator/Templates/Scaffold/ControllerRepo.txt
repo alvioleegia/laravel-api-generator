@@ -17,6 +17,7 @@ class $MODEL_NAME$Controller extends AppBaseController
 	function __construct($MODEL_NAME$Repository $$MODEL_NAME_CAMEL$Repo)
 	{
 		$this->$MODEL_NAME_CAMEL$Repository = $$MODEL_NAME_CAMEL$Repo;
+		$this->middleware('auth');
 	}
 
 	/**
