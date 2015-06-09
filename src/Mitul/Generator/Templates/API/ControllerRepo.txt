@@ -155,7 +155,8 @@ class $MODEL_NAME$APIController extends AppBaseController
 
 		if(empty($$MODEL_NAME_CAMEL$)) {
 			$this->throwRecordNotFoundException("$MODEL_NAME$ not found", ERROR_CODE_RECORD_NOT_FOUND);
-    }
+    	}
+    	
 		$input = $request->all();
 
 		$meta = array(
@@ -168,6 +169,13 @@ class $MODEL_NAME$APIController extends AppBaseController
 		 );
 
 		$$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->updateRich($input, $id);
+
+		if(!$$MODEL_NAME_CAMEL$)
+		{
+			$this->throwRecordNotFoundException("$MODEL_NAME$ not saved", ERROR_CODE_VALIDATION_FAILED);
+		}
+
+		$$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
 
 		return Response::json(ResponseManager::makeResult($$MODEL_NAME_CAMEL$->toArray(), $meta), 201);
 	}
