@@ -40,6 +40,7 @@ class $MODEL_NAME$Repository extends Repository
         }
 
         $total = $query->get()->count();
+        $limit = isset($input['limit']) ? $input['limit'] : 10;
 
         if(isset($input['offset']) & $limit > 0)
         {
