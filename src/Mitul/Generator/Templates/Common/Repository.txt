@@ -39,7 +39,20 @@ class $MODEL_NAME$Repository extends Repository
             }
         }
 
-        return [$query->get(), $attributes];
+        $total = $query->get()->count();
+
+        if(isset($input['offset']) & $limit > 0)
+        {
+            $offset = $limit * $input['offset'];
+            $query->skip($offset);
+        }
+
+        if(isset($input['limit']))
+        {
+            $query->take($limit);
+        }
+
+        return [$query->get(), $attributes, 'total'=>$total];
     }
 
     public function lastUpdated()

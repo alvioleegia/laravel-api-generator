@@ -36,9 +36,9 @@ class $MODEL_NAME$APIController extends AppBaseController
 		$$MODEL_NAME_PLURAL_CAMEL$ = $result[0];
 
 		$meta = array(
-			'total' => count($$MODEL_NAME_PLURAL_CAMEL$),
+			'total' => $result['total'],
 			'count' => count($$MODEL_NAME_PLURAL_CAMEL$),
-			'offset' => 0,
+			'offset' => isset($input['offset']) ? (int) $input['offset'] : 0,
 			'last_updated' => $this->$MODEL_NAME_CAMEL$Repository->lastUpdated(),
 			'status' => "$MODEL_NAME_PLURAL$ retrieved successfully.",
 			'error' => 'Success'
