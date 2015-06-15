@@ -41,6 +41,42 @@ class $MODEL_NAME$Repository extends Repository
 
         $total = $query->get()->count();
 
+        if(isset($input['filter']))
+        {
+            $filters = json_decode($input['filter']);
+
+            if(count($filters))
+            {
+                foreach ($filters as $key => $filter) {
+                    switch ($filter->operator) {
+                        case 'like':
+                            $query->where($filter->field, $filter->operator, '%'.$filter->value.'%');
+                        break;
+
+                        case 'between':
+                            $query->whereBetween($filter->field, [$filter->value[0], $filter->value[1]]);
+                        break;
+
+                        case 'notbetween':
+                            $query->whereNotBetween($filter->field, [$filter->value[0], $filter->value[1]]);
+                        break;
+
+                        case 'in':
+                            $query->whereIn($filter->field, $filter->value);
+                        break;
+
+                        case 'notin':
+                            $query->whereNotIn($filter->field, $filter->value);
+                        break;
+                        
+                        default:
+                            $query->where($filter->field, $filter->operator, $filter->value);
+                        break;
+                    }
+                }
+            }
+        }
+
         if(isset($input['offset']) && $input['offset'] > 0)
         {
             $query->skip($input['offset']);
