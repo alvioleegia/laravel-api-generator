@@ -30,9 +30,15 @@ class ResponseManager
 	 *
 	 * @return array
 	 */
-	public static function makeResult($data, $meta)
+	public static function makeResult($data, $meta, $isDataTable = false)
 	{
 		$result = array();
+
+		if($isDataTable){		
+			$result['recordsTotal'] = $meta['total'];
+			$result['recordsFiltered'] = $meta['total'];	
+		}
+
 		$result['meta'] = $meta;
 		$result['data'] = $data;
 

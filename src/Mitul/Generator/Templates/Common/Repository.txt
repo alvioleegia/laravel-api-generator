@@ -39,8 +39,6 @@ class $MODEL_NAME$Repository extends Repository
             }
         }
 
-        $total = $query->get()->count();
-
         if(isset($input['filter']))
         {
             $filters = json_decode($input['filter']);
@@ -76,6 +74,8 @@ class $MODEL_NAME$Repository extends Repository
                 }
             }
         }
+
+        $total = $query->count();
 
         if(isset($input['offset']) && $input['offset'] > 0)
         {
