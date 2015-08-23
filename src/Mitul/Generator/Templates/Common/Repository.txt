@@ -19,7 +19,7 @@ class $MODEL_NAME$Repository extends Repository
       return '$MODEL_NAMESPACE$';
     }
 
-	public function search($input)
+    public function search($input)
     {
         $query = $MODEL_NAME$::query();
 
@@ -28,24 +28,58 @@ class $MODEL_NAME$Repository extends Repository
 
         foreach($columns as $attribute)
         {
+            $attributes[$attribute] =  null;
             if(isset($input[$attribute]) and !empty($input[$attribute]))
             {
                 $query->where($attribute, $input[$attribute]);
                 $attributes[$attribute] = $input[$attribute];
             }
-            else
-            {
-                $attributes[$attribute] =  null;
-            }
         }
 
+        /*
+        ** Filter
+        */
+        $this->filter($input, $query);
+        
+        /*
+        ** Get count
+        */
+        $total = $query->count();
+
+        /*
+        ** Pagination
+        */
+        $this->pagination($input, $query);
+
+        /*
+        ** Order
+        */
+        $this->order($input, $query);
+
+        return [$query->get(), $attributes, 'total'=>$total];
+    }
+
+    public function lastUpdated()
+    {
+        $query = $MODEL_NAME$::orderBy('updated_at','DESC')->first();
+
+        if($query)
+        {
+            return $query->updated_at->format('Y-m-d H:i:s');
+        }
+
+        return date("Y-m-d H:i:s");
+    }
+
+    private function filter($input, &$query)
+    {
         if(isset($input['filter']))
         {
             $filters = json_decode($input['filter']);
 
             if(count($filters))
             {
-                foreach ($filters as $key => $filter) {
+                foreach ($filters as $filter) {
                     switch ($filter->operator) {
                         case 'like':
                             $query->where($filter->field, $filter->operator, '%'.$filter->value.'%');
@@ -74,9 +108,10 @@ class $MODEL_NAME$Repository extends Repository
                 }
             }
         }
+    }
 
-        $total = $query->count();
-
+    private function pagination($input, &$query)
+    {
         if(isset($input['offset']) && $input['offset'] > 0)
         {
             $query->skip($input['offset']);
@@ -86,19 +121,20 @@ class $MODEL_NAME$Repository extends Repository
         {
             $query->take($input['limit']);
         }
-
-        return [$query->get(), $attributes, 'total'=>$total];
     }
 
-    public function lastUpdated()
+    private function order($input, &$query)
     {
-        $query = $MODEL_NAME$::orderBy('updated_at','DESC')->first();
-
-        if($query)
+        if(isset($input['order']))
         {
-            return $query->updated_at->format('Y-m-d H:i:s');
-        }
+            $orders = json_decode($input['order']);
 
-        return date("Y-m-d H:i:s");
+            if(count($orders))
+            {
+                foreach ($orders as $order) {
+                    $query->orderBy($order->field, $order->sort);
+                }
+            }
+        }
     }
 }

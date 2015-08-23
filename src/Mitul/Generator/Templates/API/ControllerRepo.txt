@@ -18,6 +18,8 @@ class $MODEL_NAME$APIController extends AppBaseController
 	function __construct($MODEL_NAME$Repository $$MODEL_NAME_CAMEL$Repo)
 	{
 		$this->$MODEL_NAME_CAMEL$Repository = $$MODEL_NAME_CAMEL$Repo;
+
+		$this->beforeFilter('oauth', ['except'=>['index','show']]);
 	}
 
 	/**
@@ -46,24 +48,6 @@ class $MODEL_NAME$APIController extends AppBaseController
 
 		return Response::json(ResponseManager::makeResult($$MODEL_NAME_PLURAL_CAMEL$->toArray(), $meta));
 	}
-
-	public function search($input)
-    {
-        $query = $MODEL_NAME$::query();
-
-        $columns = Schema::getColumnListing('$TABLE_NAME$');
-        $attributes = array();
-
-        foreach($columns as $attribute)
-        {
-            if(isset($input[$attribute]) && !empty($input[$attribute]))
-            {
-                $query->where($attribute, $input[$attribute]);
-            }
-        }
-
-        return $query->get();
-    }
 
 	/**
 	 * Show the form for creating a new $MODEL_NAME$.
