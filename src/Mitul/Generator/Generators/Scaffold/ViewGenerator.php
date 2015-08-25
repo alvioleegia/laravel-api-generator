@@ -120,10 +120,17 @@ class ViewGenerator implements GeneratorProvider
 
 		$fileName = "index.blade.php";
 
+		$displayedField = 6;
+
 		$headerFields = "";
 
-		foreach($this->commandData->inputFields as $field)
+		foreach($this->commandData->inputFields as $key=>$field)
 		{
+			if($key >= $displayedField)
+			{
+				break;
+			}
+
 			$headerFields .= "<th>" . Str::title(str_replace("_", " ", $field['fieldName'])) . "</th>\n\t\t\t";
 		}
 
@@ -133,8 +140,15 @@ class ViewGenerator implements GeneratorProvider
 
 		$tableBodyFields = "";
 
-		foreach($this->commandData->inputFields as $field)
+		
+
+		foreach($this->commandData->inputFields as $key=>$field)
 		{
+			if($key >= $displayedField)
+			{
+				break;
+			}
+
 			$tableBodyFields .= "<td>{!! $" . $this->commandData->modelNameCamel . "->" . $field['fieldName'] . " !!}</td>\n\t\t\t\t\t";
 		}
 
